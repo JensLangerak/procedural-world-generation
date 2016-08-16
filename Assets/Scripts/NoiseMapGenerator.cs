@@ -21,9 +21,9 @@ public class NoiseMapGenerator {
 			for (int y = 0; y < height; y++) {
 				float coordX = x + offsetX;
 				float coordY = y + offsetY;
-				float hexOffset = ((coordX % 2) == 0.0f) ? 0 : 0.5f;
-				float sampleX = ((coordX - centerX) + seedOffset.x) * scale;
-				float sampleY = ((coordY - centerY) + seedOffset.y + hexOffset) * scale;
+				float hexOffset = ((coordY % 2) == 0.0f) ? 0 : 0.5f;
+				float sampleX = ((coordX - centerX) + seedOffset.x + hexOffset) * scale;
+				float sampleY = ((coordY - centerY) + seedOffset.y) * scale;
 
 				noiseMap [x, y] = Mathf.PerlinNoise (sampleX, sampleY);
 			}

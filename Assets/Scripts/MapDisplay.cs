@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MapDisplay : MonoBehaviour {
 	public Renderer textureRenderer;
+	public MeshFilter meshFilter;
+	public MeshRenderer meshRenderer;
 
 	public void Draw(float[,] noiseMap) {
 		int width = noiseMap.GetLength(0);
@@ -22,5 +24,10 @@ public class MapDisplay : MonoBehaviour {
 		textureRenderer.sharedMaterial.mainTexture = texture;
 		textureRenderer.transform.localScale = new Vector3 (width, 1, height);
 	
+	}
+
+	public void drawMesh(Mesh mesh)
+	{
+		meshFilter.sharedMesh = mesh;
 	}
 }

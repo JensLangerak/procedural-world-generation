@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class MapGenerator : MonoBehaviour {
+	public enum DrawMode {NoiseMap, Mesh}
+	public DrawMode drawMode;
+
 	public long seed;
 	public int mapWith;
 	public int mapHeight;
@@ -25,7 +28,13 @@ public class MapGenerator : MonoBehaviour {
 		float[,] map = noiseMapGenerator.getNoiseMap (mapWith, mapHeight, coordX, coordY);
 
 		MapDisplay display = FindObjectOfType<MapDisplay> ();
-		display.Draw (map);
+
+		if (drawMode == DrawMode.NoiseMap)
+		{
+			display.Draw(map);
+		} else if (drawMode == DrawMode.Mesh) {
+			display.drawMesh(MeshGenerator.generateMesh(map, ((coordY % 2) == 1)));
+		}
 
 	}
 }
