@@ -3,18 +3,19 @@ using System.Collections;
 
 public class MeshGenerator {
 
-	public static Mesh generateMesh(float[,] map, bool indent, Vector2 center, int detail)
+	public static Mesh generateMesh(float[,] map, bool indent, int detail)
 	{
 		detail = (detail > 7) ? 7 : (detail < 1) ? 1 : detail;
 		detail = detail - 1;
 
 		int detailSkippedPoints = (int) Mathf.Pow(2, detail);
 
-		
+		float h_sqrt_3 = Mathf.Sqrt(3.0f) * 0.5f;
+
 		int width = map.GetLength(0);
 		int height = map.GetLength(1);
-		float centerX = center.x - ((float)width) / 2.0f;
-		float centerY = center.y - ((float)height) / 2.0f;
+		float centerX = ((float)width) / 2.0f;
+		float centerY = ((float)height) / 2.0f * h_sqrt_3;
 
 		int indexWidth = (width - 1) / detailSkippedPoints + 1;
 		int indexHeight = (height - 1) / detailSkippedPoints + 1;
@@ -25,7 +26,6 @@ public class MeshGenerator {
 		int verticeIndex = 0;
 		int triangleIndex = 0;
 
-		float h_sqrt_3 = Mathf.Sqrt(3.0f) * 0.5f;
 		for (int y = 0; y < height; y++)
 		{
 			if (y % detailSkippedPoints != 0)
@@ -40,7 +40,7 @@ public class MeshGenerator {
 					continue;
 				}
 
-				vertices[verticeIndex] = new Vector3(((float) x) + offset + centerX, map[x,y] * 10, ((float)y)* h_sqrt_3 + centerY);
+				vertices[verticeIndex] = new Vector3(((float) x) + offset - centerX, map[x,y] * 10, ((float)y)* h_sqrt_3 - centerY);
 				
 				if (y > 0)
 				{

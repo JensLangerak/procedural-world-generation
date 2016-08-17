@@ -11,21 +11,22 @@ public class NoiseMapGenerator {
 		this.scale = scale;
 	}
 
-	public float[,] getNoiseMap(int width, int height, int offsetX, int offsetY) {
+	public float[,] getNoiseMap(int width, int height, Vector2 offset) {
 		float[,] noiseMap = new float[width, height];
 
 		float centerX = ((float)width) / 2.0f;
 		float centerY = ((float)height) / 2.0f;
 
+		float h_sqrt_3 = Mathf.Sqrt(3.0f) * 0.5f;
+
 		for (int x = 0; x < width; x++) {
+			float hexOffset = 0;
 			for (int y = 0; y < height; y++) {
-				float coordX = x + offsetX;
-				float coordY = y + offsetY;
-				float hexOffset = ((coordY % 2) == 0.0f) ? 0 : 0.5f;
-				float sampleX = ((coordX - centerX) + seedOffset.x + hexOffset) * scale;
-				float sampleY = ((coordY - centerY) + seedOffset.y) * scale;
+				float sampleX = ( ((float) x) + offset.x - centerX + seedOffset.x + hexOffset) * scale;
+				float sampleY = (( ((float)y) - centerY + seedOffset.y) * h_sqrt_3 + offset.y) * scale;
 
 				noiseMap [x, y] = Mathf.PerlinNoise (sampleX, sampleY);
+				hexOffset = (hexOffset == 0.5)  ? 0 : 0.5f;	
 			}
 
 		}

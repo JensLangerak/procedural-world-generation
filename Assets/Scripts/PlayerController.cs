@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
 	public float speed;
 	public float rotateSpeed;
-	public Transform camera;
+	public Transform cameraTransform;
 
 	void Update()
 	{
@@ -21,6 +21,6 @@ public class PlayerController : MonoBehaviour
 
 		transform.Rotate(Vector3.up * rotate * rotateSpeed * Time.deltaTime);
 
-		camera.Rotate(Vector3.right * rotateX * rotateSpeed * Time.deltaTime);
+		cameraTransform.Rotate(Vector3.right * rotateX * rotateSpeed * Time.deltaTime);
 	}
 }
