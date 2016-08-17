@@ -3,28 +3,44 @@ using System.Collections;
 
 public class MeshGenerator {
 
-	public static Mesh generateMesh(float[,] map, bool indent)
+	public static Mesh generateMesh(float[,] map, bool indent, Vector2 center, int detail)
 	{
+		detail = (detail > 7) ? 7 : (detail < 1) ? 1 : detail;
+		detail = detail - 1;
+
+		int detailSkippedPoints = (int) Mathf.Pow(2, detail);
+
+		
 		int width = map.GetLength(0);
 		int height = map.GetLength(1);
-		float centerX = ((float)width) / 2.0f;
-		float centerY = ((float)height) / 2.0f;
+		float centerX = center.x - ((float)width) / 2.0f;
+		float centerY = center.y - ((float)height) / 2.0f;
 
-		Vector3[] vertices = new Vector3[width * height];
-		int[] triangles = new int[(width - 1) * (height - 1) * 2 * 3];
-		Vector2[] uv = new Vector2[width * height];
+		int indexWidth = (width - 1) / detailSkippedPoints + 1;
+		int indexHeight = (height - 1) / detailSkippedPoints + 1;
+
+		Vector3[] vertices = new Vector3[indexWidth * indexHeight];
+		int[] triangles = new int[(indexWidth - 1) * (indexHeight - 1) * 2 * 3];
+		Vector2[] uv = new Vector2[indexWidth * indexHeight];
 		int verticeIndex = 0;
 		int triangleIndex = 0;
 
 		float h_sqrt_3 = Mathf.Sqrt(3.0f) * 0.5f;
 		for (int y = 0; y < height; y++)
 		{
-			float offset = (indent) ? 0.5f : 0f;
+			if (y % detailSkippedPoints != 0)
+			{
+				continue;
+			}
+			float offset = (indent) ? 0.5f * detailSkippedPoints : 0f;
 			for (int x = 0; x < width; x++)
 			{
-			
-				
-				vertices[verticeIndex] = new Vector3(((float) x) + offset - centerX, map[x,y] * 10, ((float)y)* h_sqrt_3 - centerY);
+				if (x % detailSkippedPoints != 0)
+				{
+					continue;
+				}
+
+				vertices[verticeIndex] = new Vector3(((float) x) + offset + centerX, map[x,y] * 10, ((float)y)* h_sqrt_3 + centerY);
 				
 				if (y > 0)
 				{
@@ -32,15 +48,15 @@ public class MeshGenerator {
 					{
 						if (x >= 1)
 						{
-							triangles[triangleIndex] = verticeIndex - width;
+							triangles[triangleIndex] = verticeIndex - indexWidth;
 							triangles[triangleIndex + 1] = verticeIndex - 1;
 							triangles[triangleIndex + 2] = verticeIndex;
 							triangleIndex += 3;
 						}
 						if (x < width - 1)
 						{
-							triangles[triangleIndex] = verticeIndex - width + 1;
-							triangles[triangleIndex + 1] = verticeIndex - width;
+							triangles[triangleIndex] = verticeIndex - indexWidth + 1;
+							triangles[triangleIndex + 1] = verticeIndex - indexWidth;
 							triangles[triangleIndex + 2] = verticeIndex;
 							triangleIndex += 3;
 						}
@@ -48,13 +64,13 @@ public class MeshGenerator {
 						if (x >= 1)
 						{
 							
-							triangles[triangleIndex] = verticeIndex - width - 1;
+							triangles[triangleIndex] = verticeIndex - indexWidth - 1;
 							triangles[triangleIndex + 1] = verticeIndex - 1;
 							triangles[triangleIndex + 2] = verticeIndex;
 							triangleIndex += 3;
 							
-							triangles[triangleIndex] = verticeIndex - width ;
-							triangles[triangleIndex + 1] = verticeIndex - width - 1;
+							triangles[triangleIndex] = verticeIndex - indexWidth;
+							triangles[triangleIndex + 1] = verticeIndex - indexWidth - 1;
 							triangles[triangleIndex + 2] = verticeIndex;
 							triangleIndex += 3;
 						}

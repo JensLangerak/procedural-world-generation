@@ -13,6 +13,10 @@ public class MapGenerator : MonoBehaviour {
 	public int coordX;
 	public int coordY;
 	public bool autoUpdate;
+	public Vector2 pos;
+
+	[Range(1,7)]
+	public int detail = 1;
 
 	public void generateMap() {
 		if (seed == 0) {
@@ -33,7 +37,7 @@ public class MapGenerator : MonoBehaviour {
 		{
 			display.Draw(map);
 		} else if (drawMode == DrawMode.Mesh) {
-			display.drawMesh(MeshGenerator.generateMesh(map, ((coordY % 2) == 1)));
+			display.drawMesh(MeshGenerator.generateMesh(map, ((coordY % 2) == 1), pos, detail));
 		}
 
 	}
