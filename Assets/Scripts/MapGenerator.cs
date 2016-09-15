@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour {
 		{
 			display.Draw(map);
 		} else if (drawMode == DrawMode.Mesh) {
-			display.drawMesh(MeshGenerator.generateMesh(map, false, detail));
+			display.drawMesh(MeshGenerator.generateMesh(noiseMapGenerator, mapWith, mapHeight, pos, detail, false, false, false, false));
 		}
 
 	}

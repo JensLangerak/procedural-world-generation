@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ChunkLoader : MonoBehaviour {
-	public const int viewDistance = 500;
+	public const int viewDistance = 200;
 	public int visibleChunks;
 	public Transform player;
 	public MapGenerator generator;
@@ -33,7 +33,7 @@ public class ChunkLoader : MonoBehaviour {
 			if (center.x < playerPos.x - (1 + visibleChunks) * Chunk.size || center.x > playerPos.x + (1 + visibleChunks) * Chunk.size
 				|| center.y < playerPos.y - (1.1 + visibleChunks) * Chunk.size * h_sqrt_3 || center.y > playerPos.y + (1.1 + visibleChunks) * Chunk.size * h_sqrt_3)
 			{
-				chunk.Value.visible(0);
+				chunk.Value.visible(0, false, false, false, false);
 				removeKeys.Add(chunk.Key);
 				Destroy(chunk.Value.getObject());
 			}
@@ -60,11 +60,11 @@ public class ChunkLoader : MonoBehaviour {
 				details = (details < 1) ? 1 : details;
 				if (chunks.TryGetValue(new Vector2(f_centerX + (x * Chunk.size - 0), f_centerY + y * Chunk.size * h_sqrt_3), out chunk))
 				{
-					chunk.visible(details);
+					chunk.visible(details, y >= 0, false, false, false);
 				} else
 				{
 					chunk = new Chunk(new Vector2(f_centerX + (x * Chunk.size - 0), f_centerY + y * Chunk.size * h_sqrt_3), mapGenerator, materail);
-					chunk.visible(details);
+					chunk.visible(details, y >= 0, false, y <= 0, false);
 					chunks.Add(new Vector2(f_centerX + (x * Chunk.size - 0), f_centerY + y * Chunk.size * h_sqrt_3), chunk);
 				}
 			}

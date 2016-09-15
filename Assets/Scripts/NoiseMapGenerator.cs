@@ -34,4 +34,11 @@ public class NoiseMapGenerator {
 		return noiseMap;
 	}
 
+	public float getPoint(Vector2 point, Vector2 offset)
+	{
+		Vector2 sample = point + offset;
+
+		return Mathf.PerlinNoise(sample.x * scale, sample.y * scale);
+	}
+
 }
