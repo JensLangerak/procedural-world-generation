@@ -34,7 +34,7 @@ public class MeshGenerator {
 			{
 
 				float h = 0.0f;
-				if ((lowResTop && y == 0 || lowResBottom && y == indexHeight - 1) && (x % 2 == 1))
+				if ((lowResTop && y == indexHeight - 1 || lowResBottom && y == 0) && (x % 2 == 1))
 				{
 					float h1 = mapGenerator.getPoint(new Vector2((x + offset - 1) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
 					float h2 = mapGenerator.getPoint(new Vector2((x + offset + 1) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);

@@ -33,7 +33,7 @@ public class Chunk  {
 		{
 			chunk.SetActive(false);
 		} else if (currentDetail != levelOfDetail) { 
-			meshFilter.sharedMesh = MeshGenerator.generateMesh(mapGenerator, size, size, center, levelOfDetail, lowResTop, lowResRight, lowResBottom, lowResLeft);
+			meshFilter.sharedMesh = MeshGenerator.generateMesh(mapGenerator, size + 1, size + 1, center, levelOfDetail, lowResTop, lowResRight, lowResBottom, lowResLeft);
 			currentDetail = levelOfDetail;
 			chunk.SetActive(true);
 			
