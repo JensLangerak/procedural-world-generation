@@ -47,13 +47,12 @@ public class ChunkLoader : MonoBehaviour {
 		{
 			chunks.Remove(key);
 		}
+
+
+		ChunkCoord playerChunk = getChunkCoord(playerPos);
 		
-
-		int centerX = (int)playerPos.x / Chunk.size;
-		int centerY = (int)(playerPos.y / (Chunk.size * h_sqrt_3));
-
-		float f_centerX = ((float)centerX) * Chunk.size + 0;
-		float f_centerY = ((float)centerY) * Chunk.size * h_sqrt_3;
+		float f_centerX = ((float)playerChunk.coordX) * Chunk.size;
+		float f_centerY = ((float)playerChunk.coordY) * Chunk.size * h_sqrt_3;
 	
 		
 		for (int x = -visibleChunks; x <= visibleChunks; x++)
@@ -72,12 +71,8 @@ public class ChunkLoader : MonoBehaviour {
 	{
 		Chunk chunk;
 		int details = getDetails(chunkCenter);
-		ChunkCoord chunkCoord;
-		float f_chunkCoordX = chunkCenter.x / (float)Chunk.size;
-		float f_chunkCoordY = chunkCenter.y / (((float)Chunk.size) * h_sqrt_3);
-		chunkCoord.coordX = (f_chunkCoordX > 0) ? Mathf.FloorToInt(f_chunkCoordX) : Mathf.CeilToInt(f_chunkCoordX);
-		chunkCoord.coordY = (f_chunkCoordY > 0) ? Mathf.FloorToInt(f_chunkCoordY) : Mathf.CeilToInt(f_chunkCoordY);
-
+		ChunkCoord chunkCoord = getChunkCoord(chunkCenter);
+		
 		if (details == 0)
 		{
 			return;
@@ -106,6 +101,16 @@ public class ChunkLoader : MonoBehaviour {
 			(chunkCenter.y - diffY > playerPos.y) ? chunkCenter.y - diffY : playerPos.y;
 
 		return Vector2.Distance(playerPos, new Vector2(closestX, closestY));
+	}
+
+	protected ChunkCoord getChunkCoord(Vector2 coord)
+	{
+		ChunkCoord chunkCoord;
+		float f_coordX = coord.x / (float)Chunk.size;
+		float f_coordY = coord.y / (((float)Chunk.size) * h_sqrt_3);
+		chunkCoord.coordX = (f_coordX > 0) ? Mathf.FloorToInt(f_coordX) : Mathf.CeilToInt(f_coordX);
+		chunkCoord.coordY = (f_coordY > 0) ? Mathf.FloorToInt(f_coordY) : Mathf.CeilToInt(f_coordY);
+		return chunkCoord;
 	}
 
 	protected int getDetails(Vector2 chunkCenter)

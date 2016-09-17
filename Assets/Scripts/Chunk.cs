@@ -11,6 +11,10 @@ public class Chunk  {
 	NoiseMapGenerator mapGenerator;
 
 	protected int currentDetail;
+	protected bool currentLowResTop;
+	protected bool currentLowResRight;
+	protected bool currentLowResBottom;
+	protected bool currentLowResLeft;
 
 	public Chunk(Vector2 center, NoiseMapGenerator mapGenerator, Material materail)
 	{
@@ -32,9 +36,14 @@ public class Chunk  {
 		if (levelOfDetail == 0)
 		{
 			chunk.SetActive(false);
-		} else if (currentDetail != levelOfDetail) { 
-			meshFilter.sharedMesh = MeshGenerator.generateMesh(mapGenerator, size + 1, size + 1, center, levelOfDetail, lowResTop, lowResRight, lowResBottom, lowResLeft);
+		} else if (currentDetail != levelOfDetail || currentLowResLeft != lowResLeft || currentLowResTop != lowResTop || currentLowResRight != lowResRight || currentLowResBottom != lowResBottom) {
 			currentDetail = levelOfDetail;
+			currentLowResLeft = lowResLeft;
+			currentLowResTop = lowResTop;
+			currentLowResRight = lowResRight;
+			currentLowResBottom = lowResBottom;
+
+			meshFilter.sharedMesh = MeshGenerator.generateMesh(mapGenerator, size + 1, size + 1, center, levelOfDetail, lowResTop, lowResRight, lowResBottom, lowResLeft);
 			chunk.SetActive(true);
 			
 		}
