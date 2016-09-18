@@ -23,6 +23,7 @@ public class MeshGenerator {
 		Vector3[] vertices = new Vector3[indexWidth * indexHeight + extra];
 		int[] triangles = new int[((indexWidth - 1) * (indexHeight - 1) + extra) * 2 * 3];
 		Vector2[] uv = new Vector2[indexWidth * indexHeight + extra];
+		Vector3[] vertexNormals = new Vector3[vertices.Length];
 		int verticeIndex = 0;
 		int triangleIndex = 0;
 		int extraTriangle = 0;
@@ -67,7 +68,7 @@ public class MeshGenerator {
 				}
 				else
 				{
-					h = mapGenerator.getPoint(new Vector2((x + offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
+					h = mapGenerator.getPoint(new Vector2((((float)x) + offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
 				}
 
 				if (lowResLeft && y % 4 == 2 && x == 0)
@@ -75,6 +76,40 @@ public class MeshGenerator {
 					continue;
 				} else {
 					vertices[verticeIndex] = new Vector3((((float)x) + offset) * detailSkippedPoints - centerX, h * 10, ((float)y) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) - 0.5f + offset) * detailSkippedPoints, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 topLeft = new Vector3((((float)x)-0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) +0.5f + offset) * detailSkippedPoints, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 topRight = new Vector3((((float)x)+0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x)  -1f+ offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 left = new Vector3((((float)x)-1f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) +1f + offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 right = new Vector3((((float)x)+1f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) - 0.5f + offset) * detailSkippedPoints, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 bottomLeft = new Vector3((((float)x)-0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) + 0.5f + offset) * detailSkippedPoints, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 bottomRight = new Vector3((((float)x) + 0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					Vector3 normal = calulateTriangleNormal(topLeft, topRight, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(left, topLeft, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(topRight, right, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(bottomLeft, left, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(bottomRight, bottomLeft, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(right, bottomRight, vertices[verticeIndex]);
+
+					vertexNormals[verticeIndex] += calulateTriangleNormal(topLeft, topRight, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(left, topLeft, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(topRight, right, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(bottomLeft, left, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(bottomRight, bottomLeft, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(right, bottomRight, vertices[verticeIndex]);
+
+					vertexNormals[verticeIndex].Normalize();
 				}
 
 				/* when low res left or right one point (and triangle) is removed/added */
@@ -137,7 +172,42 @@ public class MeshGenerator {
 					triangleIndex = addTriangleLeft(triangleIndex, verticeIndex, indexWidth, indent, triangles, extraTriangle);
 					uv[verticeIndex] = new Vector2(x * detailSkippedPoints / (float)width, y * detailSkippedPoints / (float)height);
 
+					h = mapGenerator.getPoint(new Vector2((((float)x) - 0.5f + offset) * detailSkippedPoints, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 topLeft = new Vector3((((float)x) - 0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) + 0.5f + offset) * detailSkippedPoints, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 topRight = new Vector3((((float)x) + 0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y + 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) - 1f + offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 left = new Vector3((((float)x) - 1f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) + 1f + offset) * detailSkippedPoints, ((float)y) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 right = new Vector3((((float)x) + 1f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) - 0.5f + offset) * detailSkippedPoints, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 bottomLeft = new Vector3((((float)x) - 0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					h = mapGenerator.getPoint(new Vector2((((float)x) + 0.5f + offset) * detailSkippedPoints, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints), center);
+					Vector3 bottomRight = new Vector3((((float)x) + 0.5f + offset) * detailSkippedPoints - centerX, h * 10, ((float)y - 1) * h_sqrt_3 * detailSkippedPoints - centerY);
+
+					Vector3 normal = calulateTriangleNormal(topLeft, topRight, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(left, topLeft, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(topRight, right, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(bottomLeft, left, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(bottomRight, bottomLeft, vertices[verticeIndex]);
+					normal = calulateTriangleNormal(right, bottomRight, vertices[verticeIndex]);
+
+					vertexNormals[verticeIndex] += calulateTriangleNormal(topLeft, topRight, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(left, topLeft, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(topRight, right, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(bottomLeft, left, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(bottomRight, bottomLeft, vertices[verticeIndex]);
+					vertexNormals[verticeIndex] += calulateTriangleNormal(right, bottomRight, vertices[verticeIndex]);
+
+					vertexNormals[verticeIndex].Normalize();
+
 					verticeIndex++;
+
 				} else if (lowResRight && y % 4 == 3 && x == indexWidth - 1)
 				{
 					triangleIndex = addTriangleDown(triangleIndex, verticeIndex - 1, indexWidth, indent, triangles, extraTriangle);
@@ -151,7 +221,8 @@ public class MeshGenerator {
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.uv = uv;
-		mesh.RecalculateNormals();
+		//mesh.RecalculateNormals();
+		mesh.normals = vertexNormals;
 		return mesh;
 	}
 
@@ -174,5 +245,12 @@ public class MeshGenerator {
 		triangles[triangleIndex + 2] = verticeIndex;
 
 		return triangleIndex + 3;
+	}
+
+	
+
+	protected static Vector3 calulateTriangleNormal(Vector3 pointA, Vector3 pointB, Vector3 pointC)
+	{
+		return Vector3.Cross(pointB - pointA, pointC - pointA).normalized;
 	}
 }
