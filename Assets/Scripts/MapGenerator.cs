@@ -9,7 +9,6 @@ public class MapGenerator : MonoBehaviour {
 	public int mapWith;
 	public int mapHeight;
 	public float scale;
-	NoiseMapGenerator noiseMapGenerator;
 	public bool autoUpdate;
 	public Vector2 pos;
 
@@ -19,7 +18,12 @@ public class MapGenerator : MonoBehaviour {
 	/**
 	 * Create a new noiseMapGenerator.
 	 */
-	public NoiseMapGenerator createGenerator()
+	public IHeightmapGenerator createGenerator()
+	{
+		return new WorldGenerator(seed);
+	}
+
+	public NoiseMapGenerator createNoiseMap()
 	{
 		if (seed == 0)
 		{
@@ -35,7 +39,7 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	public void generateMap() {
-		noiseMapGenerator = createGenerator();
+		NoiseMapGenerator noiseMapGenerator = createNoiseMap();
 
 		float[,] map = noiseMapGenerator.getNoiseMap (mapWith, mapHeight, pos);
 

@@ -8,7 +8,7 @@ public class Chunk  {
 	protected GameObject chunk;
 	MeshRenderer meshRenderer;
 	MeshFilter meshFilter;
-	NoiseMapGenerator mapGenerator;
+	IHeightmapGenerator mapGenerator;
 
 	protected int currentDetail;
 	protected bool currentLowResTop;
@@ -23,7 +23,7 @@ public class Chunk  {
 	 * @param mapGenerator mapGenerator that must be used to generate this chunk.
 	 * @param materail material for this chunk.
 	 */
-	public Chunk(Vector2 center, NoiseMapGenerator mapGenerator, Material materail)
+	public Chunk(Vector2 center, IHeightmapGenerator mapGenerator, Material materail)
 	{
 		this.center = center;
 	

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MeshGenerator {
 
-	public static Mesh generateMesh(NoiseMapGenerator mapGenerator, int width, int height, Vector2 center, int detail, bool lowResTop, bool lowResRight, bool lowResBottom, bool lowResLeft)
+	public static Mesh generateMesh(IHeightmapGenerator mapGenerator, int width, int height, Vector2 center, int detail, bool lowResTop, bool lowResRight, bool lowResBottom, bool lowResLeft)
 	{
 		//TODO method is too big (understatement), but is seems to work now
 		//TODO normal calculation at the edges with lowRes is not correct.

@@ -16,7 +16,7 @@ public class ChunkLoader : MonoBehaviour {
 	public Material materail;
 
 	protected Vector2 playerPos;
-	protected NoiseMapGenerator mapGenerator;
+	protected IHeightmapGenerator mapGenerator;
 
 	Dictionary<ChunkCoord, Chunk> chunks = new Dictionary<ChunkCoord, Chunk>();
 	protected float h_sqrt_3 = Mathf.Sqrt(3.0f) * 0.5f;

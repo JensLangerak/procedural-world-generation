@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NoiseMapGenerator {
+public class NoiseMapGenerator : IHeightmapGenerator
+{
 	protected float scale;
 	protected Vector2 seedOffset;
 
