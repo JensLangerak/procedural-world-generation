@@ -16,6 +16,9 @@ public class MapGenerator : MonoBehaviour {
 	[Range(1,7)]
 	public int detail = 1;
 
+	/**
+	 * Create a new noiseMapGenerator.
+	 */
 	public NoiseMapGenerator createGenerator()
 	{
 		if (seed == 0)

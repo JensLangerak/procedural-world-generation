@@ -29,9 +29,11 @@ public class ChunkLoader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//get player pos
 		playerPos = new Vector2(player.position.x, player.position.z);
 		List<ChunkCoord> removeKeys = new List<ChunkCoord>();
 
+		// remove the chunks that are out of the view distance 
 		foreach (KeyValuePair<ChunkCoord, Chunk> chunk in chunks)
 		{
 			Vector2 center = chunk.Value.getCenter();
@@ -48,13 +50,12 @@ public class ChunkLoader : MonoBehaviour {
 			chunks.Remove(key);
 		}
 
-
+		//get the coordinates of the chunk the player is on
 		ChunkCoord playerChunk = getChunkCoord(playerPos);
-		
 		float f_centerX = ((float)playerChunk.coordX) * Chunk.size;
 		float f_centerY = ((float)playerChunk.coordY) * Chunk.size * h_sqrt_3;
 	
-		
+		//render the chunks
 		for (int x = -visibleChunks; x <= visibleChunks; x++)
 		{
 			for (int y = -visibleChunks; y <= visibleChunks; y++)
@@ -67,6 +68,9 @@ public class ChunkLoader : MonoBehaviour {
 		}
 	}
 
+	/**
+	 * Render the chunk at the position chunkCenter.
+	 */
 	protected void loadChunk(Vector2 chunkCenter)
 	{
 		Chunk chunk;
@@ -77,11 +81,15 @@ public class ChunkLoader : MonoBehaviour {
 		{
 			return;
 		}
+
+		//if the chunk does not exist, create the chunk
 		if (!chunks.TryGetValue(chunkCoord, out chunk))
 		{
 			chunk = new Chunk(chunkCenter, mapGenerator, materail);
 			chunks.Add(chunkCoord, chunk);
 		}
+
+		//check the levelOfDetail of the chunks that are connected to this chunk
 		bool lowResTop = getDetails(new Vector2(chunkCenter.x, chunkCenter.y + Chunk.size * h_sqrt_3)) > details;
 		bool lowResBottom = getDetails(new Vector2(chunkCenter.x, chunkCenter.y - Chunk.size * h_sqrt_3)) > details;
 		bool lowResLeft = getDetails(new Vector2(chunkCenter.x - Chunk.size, chunkCenter.y)) > details;
@@ -90,6 +98,9 @@ public class ChunkLoader : MonoBehaviour {
 		chunk.visible(details, lowResTop, lowResRight, lowResBottom, lowResLeft);
 	}
 
+	/**
+	 * Get the distance from this chunk to the player.
+	 */
 	protected float distanceChunkToPlayer(Vector2 chunkCenter)
 	{
 		float diffX = 0.5f * Chunk.size;
@@ -103,6 +114,9 @@ public class ChunkLoader : MonoBehaviour {
 		return Vector2.Distance(playerPos, new Vector2(closestX, closestY));
 	}
 
+	/**
+	 * Convert the center coord to chunk coords.
+	 */
 	protected ChunkCoord getChunkCoord(Vector2 coord)
 	{
 		ChunkCoord chunkCoord;

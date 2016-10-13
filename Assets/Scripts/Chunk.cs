@@ -16,6 +16,13 @@ public class Chunk  {
 	protected bool currentLowResBottom;
 	protected bool currentLowResLeft;
 
+	/**
+	 * Create a new chunc a the center coordinates.
+	 * 
+	 * @param center the center coordinates of the chunk.
+	 * @param mapGenerator mapGenerator that must be used to generate this chunk.
+	 * @param materail material for this chunk.
+	 */
 	public Chunk(Vector2 center, NoiseMapGenerator mapGenerator, Material materail)
 	{
 		this.center = center;
@@ -31,6 +38,13 @@ public class Chunk  {
 		currentDetail = 0;
 	}
 
+	/**
+	 * Set the level of detail of this chunk.
+	 * 
+	 * @param levelOfDetail level of detail of this chunk, 1 hightest 7 lowest, 0 not visible.
+	 * @param lowRes... render the edge in one level of detail lower, so if this chunk has levelOfDetail 1 and lowResRight is true, then
+	 *  the right edge will be rendered with a levelOfDetail, this will result in a smooth transition between chunks.
+	 */
 	public void visible(int levelOfDetail, bool lowResTop, bool lowResRight, bool lowResBottom, bool lowResLeft)
 	{
 		if (levelOfDetail == 0)
